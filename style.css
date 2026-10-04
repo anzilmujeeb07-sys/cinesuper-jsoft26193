@@ -1,0 +1,174 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 40px;
+  background: #f5f5f5;
+}
+
+h1 {
+  color: #222;
+}
+
+p {
+  color: #555;
+}
+#movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 30px;
+}
+
+#movies > div {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+#movies > div:hover {
+  transform: translateY(-5px);
+}
+
+
+#movies h2 {
+  margin-top: 0;
+  color: #222;
+}
+
+#movies p {
+  color: #555;
+  line-height: 1.5;
+}
+.movie-poster {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+#reviewForm {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 25px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#reviewForm input,
+#reviewForm textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+#reviewForm textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+#reviewForm button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  background: #222;
+  color: white;
+}
+
+#reviewForm button:hover {
+  opacity: 0.85;
+}
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+  margin-bottom: 30px;
+  background: white;
+  border-radius: 12px;
+}
+
+.hero h1 {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 18px;
+  color: #666;
+}
+#reviews {
+  margin-top: 50px;
+}
+
+#reviews h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#reviews > div {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+#reviews h3 {
+  margin-top: 0;
+}
+@media (max-width: 600px) {
+  body {
+    padding: 20px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  #movies {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-poster {
+    height: 400px;
+  }
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  background: white;
+  border-radius: 10px;
+}
+
+.navbar h2 {
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
