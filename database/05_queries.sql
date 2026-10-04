@@ -1,29 +1,39 @@
--- QUERY 1: Top 5 highest-rated movies
-select *
-from movie_ratings
-where review_count > 0
-order by avg_rating desc
-limit 5;
+-- QUERY 1: Top 5 highest-ra-- Q1. Movies with genre name (INNER JOIN)
+select m.title, m.release_year, g.name as genre
+from movies m join genres g on g.id = m.genre_id;
 
--- QUERY 2: Malayalam movies
-select *
+-- Q2. Movies per genre (GROUP BY)
+select g.name, count(m.id) as total_movies
+from genres g left join movies m on m.genre_id = g.id
+group by g.name order by total_movies desc;
+
+-- Q3. Movies longer than 150 minutes
+select title, duration_min
 from movies
-where language = 'Malayalam'
-order by release_year desc;
+where duration_min > 150;
 
--- QUERY 3: Movies with no reviews
-select *
+-- Q4. Malayalam movies after 2015
+select title, release_year
 from movies
-where id not in (
-  select movie_id from reviews
-);
+where language = 'Malayalam' and release_year > 2015;
 
--- QUERY 4: Average rating by genre
-select
-  g.name as genre,
-  round(avg(r.rating), 1) as avg_rating
-from genres g
-join movies m on m.genre_id = g.id
-join reviews r on r.movie_id = m.id
-group by g.id, g.name
-order by avg_rating desc;
+-- Q5. Average rating at least 4.5 (HAVING)
+select m.title, round(avg(r.rating),1) as avg_rating
+from movies m join reviews r on r.movie_id = m.id
+group by m.title
+having avg(r.rating) >= 4.5;
+
+-- Q6. Movies with no reviews (subquery)
+select title
+from movies
+where id not in (select movie_id from reviews);
+
+-- Q7. Longest movie
+select title, duration_min
+from movies
+where duration_min = (select max(duration_min) from movies);
+
+-- Q8. Update a description
+update movies
+set description = 'An epic sci-fi journey through space and time.'
+where title = 'Interstellar';
