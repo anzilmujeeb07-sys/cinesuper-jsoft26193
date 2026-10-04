@@ -27,8 +27,13 @@ async function loadMovies() {
   }
 
   const moviesContainer = document.getElementById("movies");
+ const languageFilter = document.getElementById("languageFilter");
 
-  data.forEach((movie) => {
+const filteredMovies =
+  languageFilter.value === "all"
+    ? data
+    : data.filter((movie) => movie.language === languageFilter.value);
+  filteredMovies.forEach((movie) => {
     const rating = ratings.find((r) => r.id === movie.id);
 
     const movieCard = document.createElement("div");
@@ -46,6 +51,11 @@ async function loadMovies() {
           ? rating.avg_rating
           : "No ratings yet"
       }</p>
+      <p>🎬 IMDb: ${
+  movie.imdb_rating !== null && movie.imdb_rating !== undefined
+    ? movie.imdb_rating
+    : "N/A"
+}</p>
 
       <p>${movie.description || "No description available."}</p>
     `;
@@ -55,6 +65,10 @@ async function loadMovies() {
 }
 
 loadMovies();
+document.getElementById("languageFilter").addEventListener("change", () => {
+  document.getElementById("movies").innerHTML = "";
+  loadMovies();
+});
 
 
 const reviewForm = document.getElementById("reviewForm");

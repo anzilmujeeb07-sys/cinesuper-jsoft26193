@@ -82,7 +82,7 @@ p {
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
-  background: #222;
+  background: #7C3AED;
   color: white;
 }
 
@@ -93,7 +93,7 @@ p {
   text-align: center;
   padding: 40px 20px;
   margin-bottom: 30px;
-  background: white;
+  background:  #7C3AED;
   border-radius: 12px;
 }
 
@@ -104,7 +104,7 @@ p {
 
 .hero p {
   font-size: 18px;
-  color: #666;
+  color: white;
 }
 #reviews {
   margin-top: 50px;
@@ -153,7 +153,7 @@ p {
   gap: 25px;
   padding: 15px 20px;
   margin-bottom: 25px;
-  background: white;
+  background:#7C3AED;
   border-radius: 10px;
 }
 

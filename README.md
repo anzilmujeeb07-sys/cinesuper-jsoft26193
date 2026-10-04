@@ -24,7 +24,10 @@
 - Add a review (saved to the database)
 - Row Level Security enabled
 
-## My Personalisation
-- New movies added: …
-- New column: …
-- Extra feature: …
+**## My Personalisation**
+- New movies added: Moonlight Kerala, Rainy Day Love, Beyond the Backwaters, Letters from Kochi, and One More Sunset
+- New genre added: Romance
+- New column: IMDb rating (`imdb_rating`)
+- Extra feature: Language filter dropdown
+- New theme colour: Purple
+- Custom placeholder posters added for the 5 new movies

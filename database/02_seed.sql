@@ -78,3 +78,53 @@ insert into reviews (movie_id, reviewer_name, rating, comment) values
   ((select id from movies where title = 'Interstellar'),    'Nikhil',  5, 'Mind-blowing science.'),
   ((select id from movies where title = 'Inception'),       'Arjun',   4, 'Need to watch it twice.'),
   ((select id from movies where title = 'The Dark Knight'), 'Akhil',   5, 'The Joker is legendary.');
+
+-- Phase 12.1: My 5 personalised movies
+
+insert into genres (name)
+values ('Romance')
+on conflict (name) do nothing;
+
+insert into movies
+(title, release_year, language, duration_min, description, genre_id)
+values
+(
+  'Moonlight Kerala',
+  2024,
+  'Malayalam',
+  132,
+  'A young couple discovers love while chasing their dreams in Kerala.',
+  (select id from genres where name = 'Romance')
+),
+(
+  'Rainy Day Love',
+  2023,
+  'Malayalam',
+  128,
+  'A heartfelt story about two people who meet during a rainy evening.',
+  (select id from genres where name = 'Romance')
+),
+(
+  'Beyond the Backwaters',
+  2022,
+  'Malayalam',
+  140,
+  'Two friends travel through Kerala and discover an unexpected relationship.',
+  (select id from genres where name = 'Romance')
+),
+(
+  'Letters from Kochi',
+  2025,
+  'Malayalam',
+  125,
+  'A story of love, friendship and letters connecting two people across cities.',
+  (select id from genres where name = 'Romance')
+),
+(
+  'One More Sunset',
+  2024,
+  'Malayalam',
+  135,
+  'Two old friends meet again and get a second chance at love.',
+  (select id from genres where name = 'Romance')
+);
