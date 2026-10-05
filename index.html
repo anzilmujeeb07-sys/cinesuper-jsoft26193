@@ -3,47 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineSuper</title>
+
+  <title>CineSuper - Mini OTT</title>
 
   <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js" defer></script>
 </head>
+
 <body>
-<nav class="navbar">
-  <h2>CineSuper</h2>
-  <a href="#movies">Movies</a>
-  <a href="#reviews">Reviews</a>
-  <a href="#reviewForm">Add Review</a>
-</nav>
-  <header class="hero">
-  <h1>🎬 CineSuper</h1>
-  <p>Discover movies, explore ratings, and share your reviews.</p>
-</header>
-<select id="languageFilter">
-  <option value="all">All Languages</option>
-  <option value="Malayalam">Malayalam</option>
-  <option value="English">English</option>
-  <option value="Tamil">Tamil</option>
-  <option value="Hindi">Hindi</option>
-</select>
-<div id="movies"></div>
-  <div id="reviews">
-  <h2>Latest Reviews</h2>
-</div>
-  <h2>Add a Review</h2>
 
-<form id="reviewForm">
-  <input id="reviewerName" type="text" placeholder="Your name" required>
+  <header class="top">
+    <div class="brand">
+      <h1>🎬 CineSuper</h1>
+      <p>Your mini OTT movie library</p>
+    </div>
 
-  <input id="movieId" type="number" placeholder="Movie ID" required>
+    <nav>
+      <a href="#movies">Movies</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#add-review">Add Review</a>
+    </nav>
+  </header>
 
-  <input id="rating" type="number" min="1" max="5" placeholder="Rating (1-5)" required>
+  <main>
 
-  <textarea id="comment" placeholder="Your review"></textarea>
+    <section class="controls">
 
-  <button type="submit">Submit Review</button>
-</form>
-<script src="config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="app.js"></script>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="🔍 Search movies..."
+      >
+
+      <select id="languageFilter">
+        <option value="all">All Languages</option>
+        <option value="Malayalam">Malayalam</option>
+        <option value="English">English</option>
+        <option value="Tamil">Tamil</option>
+        <option value="Hindi">Hindi</option>
+      </select>
+
+      <select id="sortFilter">
+        <option value="default">Sort by</option>
+        <option value="newest">Newest</option>
+        <option value="oldest">Oldest</option>
+        <option value="rating">Top Rated</option>
+      </select>
+
+    </section>
+
+    <section id="movies">
+      <div id="moviesGrid">
+        <p class="loading">Loading movies...</p>
+      </div>
+    </section>
+
+    <section class="reviews-section" id="reviews">
+
+      <h2>Reviews</h2>
+
+      <div id="reviewsList">
+        <p class="loading">Loading reviews...</p>
+      </div>
+
+    </section>
+
+    <section class="add-review" id="add-review">
+
+      <h2>Add your review</h2>
+
+      <form id="reviewForm">
+
+        <input
+          type="text"
+          id="reviewerName"
+          placeholder="Your name"
+          maxlength="50"
+          required
+        >
+
+        <select id="movieId" required>
+          <option value="">Select a movie</option>
+        </select>
+
+        <select id="rating" required>
+          <option value="">Rating</option>
+          <option value="5">⭐⭐⭐⭐⭐ - 5</option>
+          <option value="4">⭐⭐⭐⭐ - 4</option>
+          <option value="3">⭐⭐⭐ - 3</option>
+          <option value="2">⭐⭐ - 2</option>
+          <option value="1">⭐ - 1</option>
+        </select>
+
+        <textarea
+          id="comment"
+          placeholder="Write your review..."
+          maxlength="500"
+        ></textarea>
+
+        <button type="submit">Submit Review</button>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <footer>
+
+    <p>
+      Built by <strong>Anzil Mujeeb</strong> · Reg No: <strong>jsoft26193</strong>
+    </p>
+
+    <p>
+      Jain School of Future Technology · Faculty: Sathish Kumar M
+    </p>
+
+    <p>
+      Powered by Supabase
+    </p>
+
+  </footer>
+
 </body>
 </html>
