@@ -13,19 +13,21 @@ body {
   color: #ffffff;
 }
 
+
+/* =========================
+   HEADER
+========================= */
+
 .top {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 35px 25px 25px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 25px;
+  padding: 40px 25px 25px;
+  text-align: center;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 34px;
+  font-size: 38px;
   color: #a78bfa;
 }
 
@@ -35,53 +37,43 @@ body {
   font-size: 15px;
 }
 
-nav {
-  display: flex;
-  gap: 22px;
-}
 
-nav a {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 15px;
-}
-
-nav a:hover {
-  color: #a78bfa;
-}
-
-main {
-  max-width: 1200px;
-  margin: auto;
-  padding: 10px 25px 50px;
-}
+/* =========================
+   SEARCH + FILTERS
+========================= */
 
 .controls {
+  width: fit-content;
+  margin: 20px auto 35px;
+
   display: flex;
+  justify-content: center;
+  align-items: center;
+
   gap: 12px;
-  margin: 20px 0 30px;
-  flex-wrap: wrap;
 }
 
 .controls input,
 .controls select {
-  height: 44px;
-  padding: 0 14px;
+  height: 42px;
+  padding: 0 13px;
+
   border: 1px solid #30303a;
-  border-radius: 8px;
+  border-radius: 7px;
+
   background: #19191f;
-  color: white;
-  font-size: 15px;
+  color: #ffffff;
+
+  font-size: 14px;
   outline: none;
 }
 
 .controls input {
-  flex: 1;
-  min-width: 240px;
+  width: 280px;
 }
 
 .controls select {
-  min-width: 170px;
+  width: 165px;
 }
 
 .controls input:focus,
@@ -89,165 +81,487 @@ main {
   border-color: #7c3aed;
 }
 
+
+/* =========================
+   MOVIE SECTION
+========================= */
+
+#movies {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 0 30px 50px;
+}
+
 #moviesGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 22px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
 }
+
+
+/* =========================
+   MOVIE CARD
+========================= */
 
 .movie-card {
   background: #19191f;
+
   border: 1px solid #292932;
   border-radius: 12px;
+
   overflow: hidden;
-  transition: 0.2s ease;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .movie-card:hover {
   transform: translateY(-5px);
+
   border-color: #7c3aed;
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .movie-poster {
   width: 100%;
-  height: 320px;
+  height: 285px;
+
   display: block;
+
   object-fit: cover;
+
   background: #24242c;
 }
 
 .movie-info {
-  padding: 16px;
+  padding: 14px;
 }
 
 .movie-info h3 {
   margin: 0 0 8px;
-  font-size: 19px;
+
+  font-size: 16px;
+  line-height: 1.3;
 }
 
 .movie-meta {
   color: #aaaab5;
-  font-size: 14px;
-  margin-bottom: 10px;
+
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .rating {
   color: #fbbf24;
+
   font-weight: bold;
+
+  margin: 8px 0 0;
+
+  font-size: 13px;
 }
 
-.imdb {
-  color: #a78bfa;
-  font-weight: bold;
+
+/* =========================
+   LOADING / EMPTY
+========================= */
+
+.loading,
+.empty {
+  color: #aaaab5;
 }
 
-.description {
-  color: #c7c7d0;
-  line-height: 1.5;
-  font-size: 14px;
+
+/* =========================
+   MOVIE MODAL
+========================= */
+
+.movie-modal {
+  display: none;
+
+  position: fixed;
+
+  z-index: 1000;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.82);
+
+  padding: 30px 15px;
+
+  overflow-y: auto;
 }
 
-.reviews-section,
-.add-review {
-  margin-top: 55px;
+.movie-modal.active {
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
 }
 
-h2 {
-  font-size: 25px;
-  margin-bottom: 20px;
-}
+.movie-modal-content {
+  position: relative;
 
-#reviewsList {
-  display: grid;
-  gap: 14px;
-}
-
-.review-card {
-  background: #19191f;
-  border: 1px solid #292932;
-  border-radius: 10px;
-  padding: 18px;
-}
-
-.review-card h3 {
-  margin: 0 0 7px;
-}
-
-.review-card .review-rating {
-  color: #fbbf24;
-  margin-bottom: 8px;
-}
-
-.review-card p {
-  color: #c7c7d0;
-  margin: 5px 0;
-}
-
-#reviewForm {
-  max-width: 650px;
-  display: grid;
-  gap: 13px;
-  background: #19191f;
-  border: 1px solid #292932;
-  border-radius: 12px;
-  padding: 22px;
-}
-
-#reviewForm input,
-#reviewForm select,
-#reviewForm textarea {
   width: 100%;
-  padding: 13px;
-  border: 1px solid #30303a;
-  border-radius: 7px;
-  background: #101014;
-  color: white;
-  font-size: 15px;
-  outline: none;
+  max-width: 850px;
+
+  margin: 20px auto;
+
+  padding: 30px;
+
+  background: #19191f;
+
+  border: 1px solid #33333e;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
-#reviewForm textarea {
-  min-height: 110px;
-  resize: vertical;
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.close-modal {
+  position: absolute;
+
+  top: 15px;
+  right: 18px;
+
+  width: 38px;
+  height: 38px;
+
+  border: 1px solid #3a3a45;
+
+  border-radius: 50%;
+
+  background: #24242c;
+
+  color: #ffffff;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
-#reviewForm input:focus,
-#reviewForm select:focus,
-#reviewForm textarea:focus {
+.close-modal:hover {
+  background: #7c3aed;
+
   border-color: #7c3aed;
 }
 
-#reviewForm button {
-  padding: 13px;
-  border: none;
-  border-radius: 7px;
-  background: #7c3aed;
-  color: white;
+
+/* =========================
+   MOVIE DETAILS
+========================= */
+
+.movie-detail {
+  padding-right: 35px;
+}
+
+.movie-detail h2 {
+  margin: 0 0 12px;
+
+  font-size: 30px;
+
+  color: #ffffff;
+}
+
+.movie-detail-meta {
+  color: #aaaab5;
+
   font-size: 15px;
+
+  margin-bottom: 12px;
+}
+
+.movie-detail-rating {
+  color: #fbbf24;
+
+  font-size: 16px;
+
   font-weight: bold;
+
+  margin-bottom: 20px;
+}
+
+.movie-detail-director {
+  color: #d6d6df;
+
+  font-size: 15px;
+
+  margin-bottom: 15px;
+}
+
+.movie-detail-description {
+  color: #c7c7d0;
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+  margin-bottom: 30px;
+}
+
+.movie-detail h3 {
+  font-size: 21px;
+
+  margin: 28px 0 15px;
+}
+
+
+/* =========================
+   REVIEWS
+========================= */
+
+.modal-reviews {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-bottom: 25px;
+}
+
+.modal-review-card {
+  padding: 16px;
+
+  background: #141419;
+
+  border: 1px solid #2d2d37;
+
+  border-radius: 10px;
+
+  transition: 0.2s ease;
+}
+
+.modal-review-card:hover {
+  border-color: #4c4c5b;
+}
+
+.modal-review-card strong {
+  color: #ffffff;
+
+  font-size: 14px;
+}
+
+.modal-review-rating {
+  color: #fbbf24;
+
+  margin: 7px 0;
+}
+
+.modal-review-comment {
+  color: #c7c7d0;
+
+  margin: 7px 0;
+
+  line-height: 1.5;
+
+  font-size: 14px;
+}
+
+.modal-review-date {
+  color: #858591;
+
+  font-size: 11px;
+
+  margin-top: 8px;
+}
+
+
+/* =========================
+   REVIEW FORM
+========================= */
+
+.modal-review-form {
+  display: flex !important;
+
+  flex-direction: column !important;
+
+  align-items: stretch !important;
+
+  gap: 16px !important;
+
+  width: 100% !important;
+
+  max-width: 620px !important;
+
+  margin: 0 auto !important;
+
+  padding: 24px !important;
+
+  background: #17171d !important;
+
+  border: 1px solid #30303b !important;
+
+  border-radius: 14px !important;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================
+   REVIEW INPUTS
+========================= */
+
+.modal-review-form input,
+.modal-review-form select,
+.modal-review-form textarea {
+  display: block !important;
+
+  width: 100% !important;
+
+  margin: 0 !important;
+
+  padding: 0 14px !important;
+
+  background: #202027 !important;
+
+  color: #ffffff !important;
+
+  border: 1px solid #363642 !important;
+
+  border-radius: 9px !important;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* Name */
+
+.modal-review-form input {
+  height: 46px;
+}
+
+
+/* Rating */
+
+.modal-review-form select {
+  height: 46px;
+
   cursor: pointer;
+
+  appearance: auto;
 }
 
-#reviewForm button:hover {
-  background: #6d28d9;
+
+/* Placeholder */
+
+.modal-review-form input::placeholder,
+.modal-review-form textarea::placeholder {
+  color: #8f8f9c;
 }
 
-.loading {
-  color: #aaaab5;
+
+/* Focus */
+
+.modal-review-form input:focus,
+.modal-review-form select:focus,
+.modal-review-form textarea:focus {
+  border-color: #8b5cf6 !important;
+
+  box-shadow:
+    0 0 0 2px rgba(139, 92, 246, 0.15);
 }
 
-.empty {
-  color: #aaaab5;
-  padding: 20px 0;
+
+/* Comment */
+
+.modal-review-form textarea {
+  height: 120px;
+
+  padding: 13px 14px !important;
+
+  resize: vertical;
+
+  line-height: 1.5;
 }
+
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+
+.modal-review-form button {
+  display: block !important;
+
+  width: 100% !important;
+
+  height: 46px;
+
+  margin: 0 !important;
+
+  border: none !important;
+
+  border-radius: 9px !important;
+
+  background: #7c3aed !important;
+
+  color: #ffffff !important;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.modal-review-form button:hover {
+  background: #8b5cf6 !important;
+
+  transform: translateY(-1px);
+}
+
+.modal-review-form button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================
+   FOOTER
+========================= */
 
 footer {
-  margin-top: 40px;
+  margin-top: 30px;
+
   padding: 30px 20px;
+
   text-align: center;
+
   border-top: 1px solid #292932;
+
   color: #9999a5;
+
   line-height: 1.7;
+
   font-size: 14px;
 }
 
@@ -255,48 +569,126 @@ footer strong {
   color: #ffffff;
 }
 
-@media (max-width: 900px) {
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1100px) {
+
+  #moviesGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+}
+
+
+/* =========================
+   SMALLER SCREENS
+========================= */
+
+@media (max-width: 800px) {
+
+  .controls {
+    flex-wrap: wrap;
+
+    width: 90%;
+  }
+
+  .controls input {
+    width: 100%;
+  }
+
+  .controls select {
+    flex: 1;
+
+    min-width: 150px;
+  }
+
   #moviesGrid {
     grid-template-columns: repeat(3, 1fr);
   }
+
 }
 
-@media (max-width: 650px) {
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 550px) {
 
   .top {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 30px 15px 20px;
   }
 
-  nav {
-    width: 100%;
-    justify-content: space-between;
+  .brand h1 {
+    font-size: 32px;
+  }
+
+  #movies {
+    padding: 0 15px 40px;
   }
 
   #moviesGrid {
     grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
   }
 
   .movie-poster {
-    height: 270px;
+    height: 250px;
   }
+
+  .movie-info {
+    padding: 11px;
+  }
+
+  .movie-info h3 {
+    font-size: 14px;
+  }
+
+  .movie-meta {
+    font-size: 11px;
+  }
+
+  .movie-detail {
+    padding-right: 0;
+  }
+
+  .movie-modal-content {
+    padding: 22px 18px;
+  }
+
+  .movie-detail h2 {
+    font-size: 24px;
+  }
+
+  .modal-review-form {
+    padding: 18px !important;
+  }
+
 }
 
-@media (max-width: 430px) {
 
-  main {
-    padding: 10px 15px 40px;
-  }
+/* =========================
+   VERY SMALL MOBILE
+========================= */
 
-  .top {
-    padding: 25px 15px;
-  }
+@media (max-width: 380px) {
 
   #moviesGrid {
     grid-template-columns: 1fr;
   }
 
   .movie-poster {
-    height: 360px;
+    height: 350px;
   }
+
+}
+.movie-count {
+  text-align: center;
+  font-size: 12px;
+  color: #888892;
+  margin: 8px 0 18px;
 }

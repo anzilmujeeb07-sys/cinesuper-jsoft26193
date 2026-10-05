@@ -9,24 +9,37 @@ let allMovies = [];
 let allRatings = [];
 
 const moviesGrid = document.getElementById("moviesGrid");
-const reviewsList = document.getElementById("reviewsList");
-
 const searchInput = document.getElementById("searchInput");
+const genreFilter = document.getElementById("genreFilter");
 const languageFilter = document.getElementById("languageFilter");
-const sortFilter = document.getElementById("sortFilter");
 
-const reviewForm = document.getElementById("reviewForm");
-const movieIdSelect = document.getElementById("movieId");
+const movieModal = document.getElementById("movieModal");
+const movieDetails = document.getElementById("movieDetails");
+const closeMovieModal = document.getElementById("closeMovieModal");
+
+
+/* =========================
+   LOAD MOVIES
+========================= */
 
 async function loadMovies() {
+
   const { data, error } = await supabaseClient
     .from("movies")
-    .select("*");
+    .select(`
+      *,
+      genres (
+        name
+      )
+    `)
+    .order("release_year", { ascending: false });
 
   if (error) {
     console.error("Error loading movies:", error);
+
     moviesGrid.innerHTML =
       '<p class="empty">Could not load movies.</p>';
+
     return;
   }
 
@@ -37,105 +50,143 @@ async function loadMovies() {
 
   if (ratingsError) {
     console.error("Error loading ratings:", ratingsError);
-    return;
+    allRatings = [];
+  } else {
+    allRatings = ratings || [];
   }
 
   allMovies = data || [];
-  allRatings = ratings || [];
 
-  populateMovieSelect();
+  populateGenreFilter();
   displayMovies();
 }
 
-function populateMovieSelect() {
-  movieIdSelect.innerHTML =
-    '<option value="">Select a movie</option>';
+
+/* =========================
+   GENRE FILTER
+========================= */
+
+function populateGenreFilter() {
+
+  genreFilter.innerHTML =
+    '<option value="all">All Genres</option>';
+
+  const genres = [];
 
   allMovies.forEach((movie) => {
+
+    if (
+      movie.genres &&
+      movie.genres.name &&
+      !genres.includes(movie.genres.name)
+    ) {
+      genres.push(movie.genres.name);
+    }
+
+  });
+
+  genres.sort();
+
+  genres.forEach((genre) => {
+
     const option = document.createElement("option");
 
-    option.value = movie.id;
-    option.textContent = movie.title;
+    option.value = genre;
+    option.textContent = genre;
 
-    movieIdSelect.appendChild(option);
+    genreFilter.appendChild(option);
+
   });
 }
 
+
+/* =========================
+   DISPLAY MOVIES
+========================= */
+
 function displayMovies() {
+
   const searchTerm =
     searchInput.value.toLowerCase().trim();
 
-  let movies = allMovies.filter((movie) => {
+  const selectedGenre =
+    genreFilter.value;
 
-    const matchesSearch =
-      movie.title.toLowerCase().includes(searchTerm);
+  const selectedLanguage =
+    languageFilter.value;
 
-    const matchesLanguage =
-      languageFilter.value === "all" ||
-      movie.language === languageFilter.value;
+  const filteredMovies =
+    allMovies.filter((movie) => {
 
-    return matchesSearch && matchesLanguage;
-  });
+      const title =
+        movie.title
+          ? movie.title.toLowerCase()
+          : "";
 
-  if (sortFilter.value === "newest") {
-    movies.sort(
-      (a, b) => b.release_year - a.release_year
-    );
-  }
+      const movieGenre =
+        movie.genres
+          ? movie.genres.name
+          : "";
 
-  if (sortFilter.value === "oldest") {
-    movies.sort(
-      (a, b) => a.release_year - b.release_year
-    );
-  }
+      const matchesSearch =
+        title.includes(searchTerm);
 
-  if (sortFilter.value === "rating") {
-    movies.sort((a, b) => {
+      const matchesGenre =
+        selectedGenre === "all" ||
+        movieGenre === selectedGenre;
 
-      const ratingA =
-        allRatings.find((r) => r.id === a.id)
-          ?.avg_rating || 0;
+      const matchesLanguage =
+        selectedLanguage === "all" ||
+        movie.language === selectedLanguage;
 
-      const ratingB =
-        allRatings.find((r) => r.id === b.id)
-          ?.avg_rating || 0;
+      return (
+        matchesSearch &&
+        matchesGenre &&
+        matchesLanguage
+      );
 
-      return ratingB - ratingA;
     });
-  }
 
   moviesGrid.innerHTML = "";
 
-  if (movies.length === 0) {
+  if (filteredMovies.length === 0) {
+
     moviesGrid.innerHTML =
       '<p class="empty">No movies found.</p>';
+
     return;
   }
 
-  movies.forEach((movie) => {
+  filteredMovies.forEach((movie) => {
 
-    const rating = allRatings.find(
-      (r) => r.id === movie.id
-    );
+    const rating =
+      allRatings.find(
+        (item) => item.id === movie.id
+      );
 
-    const card = document.createElement("article");
+    const averageRating =
+      rating &&
+      rating.avg_rating !== null
+        ? rating.avg_rating
+        : null;
+
+    const genre =
+      movie.genres
+        ? movie.genres.name
+        : "Unknown";
+
+    const card =
+      document.createElement("article");
 
     card.className = "movie-card";
 
-    const averageRating =
-      rating && rating.avg_rating !== null
-        ? rating.avg_rating
-        : "No ratings";
-
-    const imdb =
-      movie.imdb_rating !== null &&
-      movie.imdb_rating !== undefined
-        ? movie.imdb_rating
-        : "N/A";
-
     card.innerHTML = `
+
       <img
-        src="${movie.poster_url || "https://placehold.co/300x450/27272a/ffffff?text=No+Poster"}"
+        src="${
+          movie.poster_url ||
+          "https://placehold.co/300x450/27272a/ffffff?text=No+Poster"
+        }"
         alt="${movie.title}"
         class="movie-poster"
       >
@@ -145,135 +196,453 @@ function displayMovies() {
         <h3>${movie.title}</h3>
 
         <div class="movie-meta">
-          ${movie.language} · ${movie.release_year}
-          · ${movie.duration_min} min
+          ${movie.release_year}
+          · ${movie.language}
+          · ${genre}
         </div>
 
         <p class="rating">
-          ⭐ ${averageRating}
-        </p>
-
-        <p class="imdb">
-          🎬 IMDb: ${imdb}
-        </p>
-
-        <p class="description">
-          ${movie.description || "No description available."}
+          ${
+            averageRating === null
+              ? "No ratings yet"
+              : `⭐ ${averageRating}`
+          }
         </p>
 
       </div>
+
     `;
+
+    card.addEventListener("click", () => {
+      openMovieDetails(movie.id);
+    });
 
     moviesGrid.appendChild(card);
+
   });
 }
 
-async function loadReviews() {
 
-  const { data: reviews, error } =
-    await supabaseClient
-      .from("reviews")
-      .select("*")
-      .order("created_at", {
-        ascending: false
-      });
+/* =========================
+   OPEN MOVIE DETAILS
+========================= */
 
-  if (error) {
-    console.error("Error loading reviews:", error);
+async function openMovieDetails(movieId) {
 
-    reviewsList.innerHTML =
-      '<p class="empty">Could not load reviews.</p>';
+  const movie =
+    allMovies.find(
+      (item) => item.id === movieId
+    );
 
+  if (!movie) {
     return;
   }
 
-  reviewsList.innerHTML = "";
+  movieModal.classList.add("active");
 
-  if (!reviews || reviews.length === 0) {
-    reviewsList.innerHTML =
-      '<p class="empty">No reviews yet. Be the first to add one!</p>';
-    return;
+  movieDetails.innerHTML = `
+    <p class="loading">
+      Loading movie details...
+    </p>
+  `;
+
+  const genre =
+    movie.genres
+      ? movie.genres.name
+      : "Unknown";
+
+  const rating =
+    allRatings.find(
+      (item) => item.id === movie.id
+    );
+
+  const averageRating =
+    rating &&
+    rating.avg_rating !== null
+      ? rating.avg_rating
+      : null;
+
+
+  /* =========================
+     LOAD REVIEWS
+  ========================= */
+
+  const {
+    data: reviews,
+    error: reviewsError
+  } = await supabaseClient
+    .from("reviews")
+    .select("*")
+    .eq("movie_id", movie.id)
+    .order("created_at", {
+      ascending: false
+    });
+
+  if (reviewsError) {
+    console.error(
+      "Error loading reviews:",
+      reviewsError
+    );
   }
 
-  reviews.forEach((review) => {
+  const movieReviews =
+    reviews || [];
 
-    const card = document.createElement("div");
 
-    card.className = "review-card";
+  /* =========================
+     REVIEWS HTML
+  ========================= */
 
-    card.innerHTML = `
-      <h3>${review.reviewer_name}</h3>
+  let reviewsHTML = "";
 
-      <p class="review-rating">
-        ${"⭐".repeat(review.rating)}
-        (${review.rating}/5)
-      </p>
+  if (movieReviews.length === 0) {
 
-      <p>
-        ${review.comment || "No comment"}
+    reviewsHTML = `
+      <p class="empty">
+        No reviews yet. Be the first to review this movie!
       </p>
     `;
 
-    reviewsList.appendChild(card);
-  });
-}
+  } else {
 
-reviewForm.addEventListener(
-  "submit",
-  async (event) => {
+    reviewsHTML =
+      movieReviews
+        .map((review) => {
 
-    event.preventDefault();
+          const reviewDate =
+            review.created_at
+              ? new Date(
+                  review.created_at
+                ).toLocaleString()
+              : "";
 
-    const reviewerName =
-      document.getElementById("reviewerName")
-        .value.trim();
+          return `
+            <div class="modal-review-card">
 
-    const movieId =
-      document.getElementById("movieId").value;
+              <strong>
+                ${escapeHTML(review.reviewer_name)}
+              </strong>
 
-    const rating =
-      document.getElementById("rating").value;
+              <div class="modal-review-rating">
+                ${"⭐".repeat(Number(review.rating))}
+              </div>
 
-    const comment =
-      document.getElementById("comment")
-        .value.trim();
+              <p class="modal-review-comment">
+                ${
+                  review.comment
+                    ? escapeHTML(review.comment)
+                    : "No comment"
+                }
+              </p>
 
-    if (!reviewerName || !movieId || !rating) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+              <div class="modal-review-date">
+                ${reviewDate}
+              </div>
 
-    const { error } =
-      await supabaseClient
-        .from("reviews")
-        .insert({
-          movie_id: movieId,
-          reviewer_name: reviewerName,
-          rating: Number(rating),
-          comment: comment
-        });
+            </div>
+          `;
 
-    if (error) {
-      console.error(
-        "Error adding review:",
-        error
+        })
+        .join("");
+
+  }
+
+
+  /* =========================
+     MOVIE DETAILS HTML
+  ========================= */
+
+  movieDetails.innerHTML = `
+
+    <div class="movie-detail">
+
+      <h2>
+        ${escapeHTML(movie.title)}
+      </h2>
+
+      <div class="movie-detail-meta">
+        ${movie.release_year}
+        · ${escapeHTML(movie.language)}
+        · ${escapeHTML(genre)}
+        ${
+          movie.duration_min
+            ? ` · ${movie.duration_min} min`
+            : ""
+        }
+      </div>
+
+      <div class="movie-detail-rating">
+        ${
+          averageRating === null
+            ? "No ratings yet"
+            : `⭐ ${averageRating}`
+        }
+      </div>
+
+      ${
+        movie.director
+          ? `
+            <div class="movie-detail-director">
+              🎬 Directed by
+              <strong>
+                ${escapeHTML(movie.director)}
+              </strong>
+            </div>
+          `
+          : ""
+      }
+
+      <p class="movie-detail-description">
+        ${escapeHTML(
+          movie.detailed_description ||
+          movie.description ||
+          "No description available."
+        )}
+      </p>
+
+      <h3>
+        Reviews
+      </h3>
+
+      <div class="modal-reviews">
+        ${reviewsHTML}
+      </div>
+
+      <h3>
+        Add your review
+      </h3>
+
+      <form
+        class="modal-review-form"
+        id="modalReviewForm"
+      >
+
+        <input
+          type="text"
+          id="modalReviewerName"
+          placeholder="Your name"
+          maxlength="50"
+          required
+        >
+
+        <select
+          id="modalRating"
+          required
+        >
+
+          <option value="">
+            Select rating
+          </option>
+
+          <option value="5">
+            ⭐⭐⭐⭐⭐ (5)
+          </option>
+
+          <option value="4">
+            ⭐⭐⭐⭐ (4)
+          </option>
+
+          <option value="3">
+            ⭐⭐⭐ (3)
+          </option>
+
+          <option value="2">
+            ⭐⭐ (2)
+          </option>
+
+          <option value="1">
+            ⭐ (1)
+          </option>
+
+        </select>
+
+        <textarea
+          id="modalComment"
+          placeholder="Write your review..."
+          maxlength="500"
+        ></textarea>
+
+        <button type="submit">
+          Submit Review
+        </button>
+
+      </form>
+
+    </div>
+
+  `;
+
+
+  /* =========================
+     REVIEW FORM SUBMIT
+  ========================= */
+
+  const form =
+    document.getElementById(
+      "modalReviewForm"
+    );
+
+  form.addEventListener(
+    "submit",
+    async (event) => {
+
+      event.preventDefault();
+
+      const reviewerName =
+        document
+          .getElementById("modalReviewerName")
+          .value
+          .trim();
+
+      const ratingValue =
+        document
+          .getElementById("modalRating")
+          .value;
+
+      const comment =
+        document
+          .getElementById("modalComment")
+          .value
+          .trim();
+
+      if (!reviewerName) {
+
+        alert(
+          "Please enter your name."
+        );
+
+        return;
+      }
+
+      if (!ratingValue) {
+
+        alert(
+          "Please select a rating."
+        );
+
+        return;
+      }
+
+      const rating =
+        Number(ratingValue);
+
+      const { error } =
+        await supabaseClient
+          .from("reviews")
+          .insert({
+            movie_id: movie.id,
+            reviewer_name: reviewerName,
+            rating: rating,
+            comment: comment
+          });
+
+      if (error) {
+
+        console.error(
+          "Error adding review:",
+          error
+        );
+
+        alert(
+          "Could not submit review. Check the browser console for details."
+        );
+
+        return;
+      }
+
+      alert(
+        "Review submitted successfully!"
       );
 
-      alert("Could not submit review.");
-      return;
+      form.reset();
+
+      await loadMovies();
+
+      await openMovieDetails(movie.id);
+
     }
+  );
 
-    alert("Review submitted successfully!");
+}
 
-    reviewForm.reset();
 
-    await loadReviews();
-    await loadMovies();
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    value ?? "";
+
+  return div.innerHTML;
+}
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+closeMovieModal.addEventListener(
+  "click",
+  () => {
+
+    movieModal.classList.remove(
+      "active"
+    );
+
   }
 );
 
+
+movieModal.addEventListener(
+  "click",
+  (event) => {
+
+    if (
+      event.target === movieModal
+    ) {
+
+      movieModal.classList.remove(
+        "active"
+      );
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+
+    if (event.key === "Escape") {
+
+      movieModal.classList.remove(
+        "active"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
+   SEARCH + FILTERS
+========================= */
+
 searchInput.addEventListener(
   "input",
+  displayMovies
+);
+
+genreFilter.addEventListener(
+  "change",
   displayMovies
 );
 
@@ -282,10 +651,9 @@ languageFilter.addEventListener(
   displayMovies
 );
 
-sortFilter.addEventListener(
-  "change",
-  displayMovies
-);
+
+/* =========================
+   START
+========================= */
 
 loadMovies();
-loadReviews();

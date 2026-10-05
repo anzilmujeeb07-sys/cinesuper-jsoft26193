@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,12 +21,6 @@
       <h1>🎬 CineSuper</h1>
       <p>Your mini OTT movie library</p>
     </div>
-
-    <nav>
-      <a href="#movies">Movies</a>
-      <a href="#reviews">Reviews</a>
-      <a href="#add-review">Add Review</a>
-    </nav>
   </header>
 
   <main>
@@ -38,6 +33,10 @@
         placeholder="🔍 Search movies..."
       >
 
+      <select id="genreFilter">
+        <option value="all">All Genres</option>
+      </select>
+
       <select id="languageFilter">
         <option value="all">All Languages</option>
         <option value="Malayalam">Malayalam</option>
@@ -46,80 +45,50 @@
         <option value="Hindi">Hindi</option>
       </select>
 
-      <select id="sortFilter">
-        <option value="default">Sort by</option>
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
-        <option value="rating">Top Rated</option>
-      </select>
-
     </section>
 
+    <p class="movie-count">18 movie(s) found</p>
+
     <section id="movies">
+
       <div id="moviesGrid">
         <p class="loading">Loading movies...</p>
       </div>
+
     </section>
 
-    <section class="reviews-section" id="reviews">
+    <div id="movieModal" class="movie-modal">
 
-      <h2>Reviews</h2>
+      <div class="movie-modal-content">
 
-      <div id="reviewsList">
-        <p class="loading">Loading reviews...</p>
+        <button
+          id="closeMovieModal"
+          class="close-modal"
+          type="button"
+        >
+          ✕
+        </button>
+
+        <div id="movieDetails"></div>
+
       </div>
 
-    </section>
-
-    <section class="add-review" id="add-review">
-
-      <h2>Add your review</h2>
-
-      <form id="reviewForm">
-
-        <input
-          type="text"
-          id="reviewerName"
-          placeholder="Your name"
-          maxlength="50"
-          required
-        >
-
-        <select id="movieId" required>
-          <option value="">Select a movie</option>
-        </select>
-
-        <select id="rating" required>
-          <option value="">Rating</option>
-          <option value="5">⭐⭐⭐⭐⭐ - 5</option>
-          <option value="4">⭐⭐⭐⭐ - 4</option>
-          <option value="3">⭐⭐⭐ - 3</option>
-          <option value="2">⭐⭐ - 2</option>
-          <option value="1">⭐ - 1</option>
-        </select>
-
-        <textarea
-          id="comment"
-          placeholder="Write your review..."
-          maxlength="500"
-        ></textarea>
-
-        <button type="submit">Submit Review</button>
-
-      </form>
-
-    </section>
+    </div>
 
   </main>
 
   <footer>
 
     <p>
-      Built by <strong>Anzil Mujeeb</strong> · Reg No: <strong>jsoft26193</strong>
+      Built by
+      <strong>Anzil Mujeeb</strong>
+      · Reg No:
+      <strong>jsoft26193</strong>
     </p>
 
     <p>
-      Jain School of Future Technology · Faculty: Sathish Kumar M
+      Jain School of Future Technology
+      · Faculty: Sathish Kumar M
     </p>
 
     <p>
